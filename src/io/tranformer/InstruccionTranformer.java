@@ -10,7 +10,7 @@ import java.util.List;
  * Clase que implementa la transformacion de Instrucciones a
  * partir de un String
  */
-public class InstruccionTranformer implements  Tranformer<List<Instruccion>,String>{
+public class InstruccionTranformer implements Transformer<List<Instruccion>,String> {
 
     public List<Instruccion> transform(String linea) throws ReaderException{
         String[] arrayStringInstrucciones = linea.split("");

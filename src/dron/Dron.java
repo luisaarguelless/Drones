@@ -1,8 +1,8 @@
 package dron;
 
-import instruccion.Instruccion;
 
-import java.util.List;
+import io.exception.ReaderException;
+import io.exception.WriterException;
 
 /**
  * Interfaz que representa el comportamiento de un Dron general.
@@ -10,7 +10,8 @@ import java.util.List;
  */
 public interface Dron {
 
-    public void ejecutarInstruccion(List<Instruccion> instrucciones);
-    public String darReporteEjecucion();
+    public void ejecutarInstrucciones();
+    public void darReporteEjecucion() throws WriterException;
+    public void setInstrucciones(String data) throws ReaderException;
 
 }
