@@ -1,14 +1,16 @@
 import casilla.CasillaPlanoCartesiano;
 import casilla.Direccion;
 import dron.Dron;
-import dron.DronEntregaDomicilios;
-import instruccion.Instruccion;
-import io.Reader;
+import dron.DronMuyBasico;
+import dron.reparto.DronRepartoAveriado;
+import dron.reparto.DronRepartoBueno;
 import io.Writer;
 import io.exception.ReaderException;
 import io.exception.WriterException;
+import io.Reader;
+import io.reparto.FileWriter;
 import io.tranformer.InstruccionTranformer;
-import io.tranformer.Tranformer;
+import io.tranformer.Transformer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,21 +21,38 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
         Reader reader = new Reader("in.txt");
-        Tranformer tranformer = new InstruccionTranformer();
-        Dron dron =
-                new DronEntregaDomicilios(
-                        new CasillaPlanoCartesiano(0, 0, Direccion.NORTE));
-        List<String> resultadosEjecucion = new ArrayList<String>();
-        try {
+        Transformer tranformer = new InstruccionTranformer();
+
+        List<Dron> listaDrones = new ArrayList<Dron>();
+        listaDrones.add(new DronRepartoBueno(
+                new CasillaPlanoCartesiano(0, 0, Direccion.NORTE),1,tranformer, new FileWriter("out1.txt")));
+        listaDrones.add(new DronRepartoAveriado(
+                new CasillaPlanoCartesiano(0,0,Direccion.NORTE),1, tranformer, new FileWriter("out2.txt")));
+        listaDrones.add(new DronMuyBasico());
+        listaDrones.add(new DronRepartoAveriado(
+                new CasillaPlanoCartesiano(0, 0, Direccion.NORTE),
+                1, tranformer, new Writer<List<String>>() {
+            @Override
+            public void write(List<String> data) throws WriterException {
+                for(String line: data){
+                    System.out.println(line);
+                }
+            }
+        }
+
+        ));
+         try {
             List<String> lineas = reader.leerArchivo();
             for (String linea : lineas) {
-                List<Instruccion> lineaInstrucciones =
-                        (List<Instruccion>) tranformer.transform(linea);
-                dron.ejecutarInstruccion(lineaInstrucciones);
-                resultadosEjecucion.add(dron.darReporteEjecucion());
+                for(Dron dron: listaDrones){
+                    dron.setInstrucciones(linea);
+                    dron.ejecutarInstrucciones();
+                }
             }
-            //Write in the file
-            new Writer("out.txt").escribirArchivo(resultadosEjecucion);
+            //Dar Reporte
+            for(Dron dron : listaDrones){
+                 dron.darReporteEjecucion();
+             }
         } catch (ReaderException e) {
             e.printStackTrace();
         } catch(WriterException e){

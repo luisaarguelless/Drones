@@ -6,7 +6,7 @@ package casilla;
  */
 public interface Casilla {
 
-    public Casilla avanzar();
+    public Casilla avanzar(int pasos);
     public Casilla girarIzquierda();
     public Casilla girarDerecha();
 }
