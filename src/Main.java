@@ -29,18 +29,7 @@ public class Main {
         listaDrones.add(new DronRepartoAveriado(
                 new CasillaPlanoCartesiano(0,0,Direccion.NORTE),1, tranformer, new FileWriter("out2.txt")));
         listaDrones.add(new DronMuyBasico());
-        listaDrones.add(new DronRepartoAveriado(
-                new CasillaPlanoCartesiano(0, 0, Direccion.NORTE),
-                1, tranformer, new Writer<List<String>>() {
-            @Override
-            public void write(List<String> data) throws WriterException {
-                for(String line: data){
-                    System.out.println(line);
-                }
-            }
-        }
 
-        ));
          try {
             List<String> lineas = reader.leerArchivo();
             for (String linea : lineas) {
