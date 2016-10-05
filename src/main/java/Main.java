@@ -1,15 +1,15 @@
+import casilla.Casilla;
 import casilla.CasillaPlanoCartesiano;
 import casilla.Direccion;
 import dron.Dron;
 import dron.DronMuyBasico;
-import dron.reparto.DronRepartoAveriado;
-import dron.reparto.DronRepartoBueno;
-import io.exception.ReaderException;
-import io.exception.WriterException;
+import dron.entregas.DronEntregaDomicilioAveriado;
+import dron.entregas.DronEntregaDomicilio;
 import io.Reader;
-import io.file.FileWriter;
-import io.tranformer.InstruccionTranformer;
+import io.exception.ReaderException;
+import io.file.FileReader;
 import io.tranformer.Transformer;
+import io.tranformer.factory.TranformerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,31 +19,27 @@ import java.util.List;
  */
 public class Main {
     public static void main(String[] args) {
-        Reader reader = new Reader("in.txt");
-        Transformer tranformer = new InstruccionTranformer();
 
+        Reader fileReader = new FileReader("in.txt");
+        Casilla casillaInicial = new CasillaPlanoCartesiano(0,0,Direccion.NORTE);
         List<Dron> listaDrones = new ArrayList<Dron>();
-        listaDrones.add(new DronRepartoBueno(
-                new CasillaPlanoCartesiano(0, 0, Direccion.NORTE),1,tranformer, new FileWriter("out1.txt")));
-        listaDrones.add(new DronRepartoAveriado(
-                new CasillaPlanoCartesiano(0,0,Direccion.NORTE),1, tranformer, new FileWriter("out2.txt")));
+        listaDrones.add(new DronEntregaDomicilio(casillaInicial,1));
+        listaDrones.add(new DronEntregaDomicilioAveriado(casillaInicial,1));
         listaDrones.add(new DronMuyBasico());
 
          try {
-            List<String> lineas = reader.leerArchivo();
+            List<String> lineas =(List<String>) fileReader.read();
             for (String linea : lineas) {
                 for(Dron dron: listaDrones){
-                    dron.setInstrucciones(linea);
-                    dron.ejecutarInstrucciones();
+                    Transformer tranformer = TranformerFactory.getTranformer(dron);
+                    dron.ejecutarInstrucciones(tranformer.transform(linea));
                 }
             }
             //Dar Reporte
             for(Dron dron : listaDrones){
-                 dron.darReporteEjecucion();
-             }
+                System.out.println( dron.darReporteEjecucion());
+            }
         } catch (ReaderException e) {
-            e.printStackTrace();
-        } catch(WriterException e){
             e.printStackTrace();
         }
     }

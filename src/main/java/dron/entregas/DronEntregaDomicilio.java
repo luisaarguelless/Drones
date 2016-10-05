@@ -1,17 +1,15 @@
-package dron.reparto;
+package dron.entregas;
 
 import casilla.Casilla;
 import instruccion.Instruccion;
-import io.Writer;
-import io.tranformer.Transformer;
 
 /**
  * Clase que representa los drones que entregan Domicilio.
  */
-public class DronRepartoBueno extends  DronReparto{
+public class DronEntregaDomicilio extends DronEntrega {
 
-    public DronRepartoBueno(Casilla casillaActual, int numeroPasos, Transformer tranformer, Writer writer) {
-        super(casillaActual, numeroPasos, tranformer, writer);
+    public DronEntregaDomicilio(Casilla casillaActual, int numeroPasos) {
+        super(casillaActual, numeroPasos);
     }
 
     @Override

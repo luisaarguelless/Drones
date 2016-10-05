@@ -8,10 +8,10 @@ import io.exception.WriterException;
  * Interfaz que representa el comportamiento de un Dron general.
  *
  */
-public interface Dron {
+public interface Dron<T,V> {
 
-    public void ejecutarInstrucciones();
-    public void darReporteEjecucion() throws WriterException;
-    public void setInstrucciones(String data) throws ReaderException;
+    public void ejecutarInstrucciones(T t);
+    public V darReporteEjecucion();
+
 
 }
