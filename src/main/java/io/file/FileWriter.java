@@ -1,4 +1,4 @@
-package io.reparto;
+package io.file;
 
 import io.Writer;
 import io.exception.WriterException;

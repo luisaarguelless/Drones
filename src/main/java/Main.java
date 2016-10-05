@@ -4,11 +4,10 @@ import dron.Dron;
 import dron.DronMuyBasico;
 import dron.reparto.DronRepartoAveriado;
 import dron.reparto.DronRepartoBueno;
-import io.Writer;
 import io.exception.ReaderException;
 import io.exception.WriterException;
 import io.Reader;
-import io.reparto.FileWriter;
+import io.file.FileWriter;
 import io.tranformer.InstruccionTranformer;
 import io.tranformer.Transformer;
 
