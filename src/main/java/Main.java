@@ -31,27 +31,47 @@ public class Main {
     private static void hacerEntregasSecuenciales(Integer numeroRutasHacer){
         Casilla casillaInicial = new CasillaPlanoCartesiano(0,0,Direccion.NORTE);
         Integer velocidadDron = 1;
-        IntStream.rangeClosed(1,numeroRutasHacer).forEach(index -> {
+        IntStream.rangeClosed(1,numeroRutasHacer)
+                .forEach(index -> {
             hacerRutaDeEntregasIndividual(index, casillaInicial, velocidadDron);
         });
     }
 
     public static void hacerEntregasConcurrentes(Integer numeroRutasHacer){
-        Casilla casillaInicial = new CasillaPlanoCartesiano(0,0,Direccion.NORTE);
+        Casilla casillaInicial =
+                new CasillaPlanoCartesiano(0,0,Direccion.NORTE);
         Integer velocidadDron = 1;
-        IntStream.rangeClosed(1,numeroRutasHacer).parallel().forEach(index -> {
+        IntStream.rangeClosed(1,numeroRutasHacer)
+                .parallel()
+                .forEach(index -> {
             hacerRutaDeEntregasIndividual(index, casillaInicial, velocidadDron);
         });
+       /*
+       Esta es la implementacion de la concurrencia en Java 7 o inferiores
+       for(int i = 1; i <= numeroRutasHacer; i++){
+           final int index = i;
+           Thread hilo = new Thread(new Runnable() {
+               @Override
+               public void run() {
+                   hacerRutaDeEntregasIndividual(
+                           index,casillaInicial,velocidadDron);
+               }
+           });
+           hilo.start();
+       }*/
     }
 
-    private static void hacerRutaDeEntregasIndividual(int numeroRuta,  Casilla casillaInicial, Integer velocidadDron ){
+    private static void hacerRutaDeEntregasIndividual(int numeroRuta,
+                                                      Casilla casillaInicial,
+                                                      Integer velocidadDron ){
         try{
             Reader reader = new FileReader(getNombreArchivoEntrada(numeroRuta));
             List<String> lineas = (List<String>) reader.read();
             Dron dron = new DronEntregaDomicilio(casillaInicial, velocidadDron );
             Transformer transformer = TransformerFactory.getTranformer(dron);
             for(String lineaInstrucciones : lineas){
-                List<Instruccion> instrucciones = (List<Instruccion>) transformer.transform(lineaInstrucciones);
+                List<Instruccion> instrucciones =
+                        (List<Instruccion>) transformer.transform(lineaInstrucciones);
                 dron.ejecutarInstrucciones(instrucciones);
             }
             Writer writer = new FileWriter(getNombreArchivoSalida(numeroRuta));
