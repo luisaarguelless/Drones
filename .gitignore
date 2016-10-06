@@ -1,4 +1,6 @@
 *.iml
 .idea/*
 out/*
-out*.txt
+*.txt*
+!in.txt
+target/*

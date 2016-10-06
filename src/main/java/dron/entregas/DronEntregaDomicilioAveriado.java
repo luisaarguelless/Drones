@@ -1,19 +1,17 @@
-package dron.reparto;
+package dron.entregas;
 
 import casilla.Casilla;
 import instruccion.Instruccion;
-import io.Writer;
-import io.tranformer.Transformer;
 
 /**
  * Clase que representa un dron de reparto averiado que hace exactamente lo contrario a lo que se le
  * pide
  */
 
-public class DronRepartoAveriado extends DronReparto {
+public class DronEntregaDomicilioAveriado extends DronEntrega {
 
-    public DronRepartoAveriado(Casilla casilla, int pasos, Transformer transformer, Writer writer){
-        super(casilla,pasos, transformer, writer);
+    public DronEntregaDomicilioAveriado(Casilla casilla, int pasos){
+        super(casilla,pasos);
     }
 
     @Override
