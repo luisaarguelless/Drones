@@ -25,8 +25,11 @@ public class FileReader implements Reader<List<String>> {
         try(Stream<String> stream = Files.lines(Paths.get(fileName))){
             List<String> lineas = new ArrayList();
             stream.forEach(lineas::add);
+            System.out.println("Leyendo el archivo " + fileName);
             return lineas;
         }catch(IOException ex){
+            System.out.println("Excepcion leyendo el archivo " + fileName);
+            ex.printStackTrace();
             throw  new ReaderException(ex.getMessage(), ex.getCause());
         }
     }
