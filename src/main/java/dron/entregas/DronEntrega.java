@@ -13,15 +13,15 @@ import java.util.List;
 public abstract  class DronEntrega implements Dron<List<Instruccion>, List<String>>{
 
     private Casilla casillaActual;
-    private final int numeroDePasos;
+    private final Integer velocidadDron;
     private List<String> listaResultadosEjecucion = new ArrayList<String>();
 
-    public DronEntrega(Casilla casillaActual, int numeroDePasos)
+    public DronEntrega(Casilla casillaActual, Integer velocidadDron)
             throws IllegalArgumentException{
-        if(numeroDePasos < 0)
+        if(velocidadDron < 0)
             throw  new IllegalArgumentException("El número de pasos que da el Dron de reparto debe ser mayor a cero");
         this.casillaActual = casillaActual;
-        this.numeroDePasos = numeroDePasos;
+        this.velocidadDron = velocidadDron;
     }
 
     public Casilla getCasillaActual(){
@@ -30,32 +30,23 @@ public abstract  class DronEntrega implements Dron<List<Instruccion>, List<Strin
 
 
     public int getPasos(){
-        return numeroDePasos;
+        return velocidadDron;
     }
 
-
-
-    @Override
-    public void ejecutarInstrucciones(List<Instruccion> instrucciones){
-        for(Instruccion instruccion: instrucciones){
-            ejecutarInstruccion(instruccion);
-        }
+    protected void guardarResultadoEjecucion(){
         listaResultadosEjecucion.add(casillaActual.toString());
     }
 
-    @Override
     public List<String> darReporteEjecucion(){
-        return this.listaResultadosEjecucion;
+        return listaResultadosEjecucion;
     }
 
-    protected abstract void ejecutarInstruccion(Instruccion instruccion);
-
     protected void avanzar(){
-        this.casillaActual = casillaActual.avanzar(numeroDePasos);
+        this.casillaActual = casillaActual.avanzar(velocidadDron);
     }
 
     protected  void retroceder(){
-        this.casillaActual = casillaActual.avanzar(-numeroDePasos);
+        this.casillaActual = casillaActual.avanzar(-velocidadDron);
     }
 
     protected  void girarIzquierda(){

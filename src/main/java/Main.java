@@ -3,6 +3,7 @@ import casilla.CasillaPlanoCartesiano;
 import casilla.Direccion;
 import dron.Dron;
 import dron.entregas.DronEntregaDomicilio;
+import dron.entregas.DronEntregaDomicilioConBrazo;
 import instruccion.Instruccion;
 import io.Reader;
 import io.Writer;
@@ -21,10 +22,12 @@ import java.util.stream.IntStream;
  */
 public class Main {
     public static void main(String[] args) {
+
         Long momentoInicio = System.currentTimeMillis();
         //hacerEntregasSecuenciales(20);
         hacerEntregasConcurrentes(20);
         Long momentoFinal = System.currentTimeMillis();
+        hacerOrdenDronConBrazo();
         System.out.println("La ejecución demoró " + (momentoFinal - momentoInicio) + " milisegundos");
     }
 
@@ -97,6 +100,26 @@ public class Main {
 
     private static String getNombreArchivoSalida(int index){
         return getNombreArchivo("out", index);
+    }
+
+    private static void hacerOrdenDronConBrazo(){
+       try{
+           Reader reader = new FileReader("in.txt");
+           List<String> lineas = (List<String>) reader.read();
+           Casilla casillaInicial = new CasillaPlanoCartesiano(0,0,Direccion.NORTE);
+           Integer velocidadDron = 1;
+           Dron dron = new DronEntregaDomicilioConBrazo(casillaInicial, velocidadDron);
+           for(String linea: lineas){
+               List<Instruccion> instrucciones = (List<Instruccion>) TransformerFactory.getTranformer(dron).transform(linea);
+               dron.ejecutarInstrucciones(instrucciones);
+           }
+           Writer writer = new FileWriter("out-dron-brazo.txt");
+           writer.write(dron.darReporteEjecucion());
+       }catch(ReaderException e){
+           throw  new RuntimeException(e.getMessage(), e.getCause());
+       }catch(WriterException e){
+           throw  new RuntimeException(e.getMessage(), e.getCause());
+       }
     }
 }
 
